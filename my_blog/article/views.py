@@ -4,6 +4,8 @@ from django.http import HttpResponse
 
 from .models import ArticlePost
 
+import markdown
+
 def article_list(request):
     articles = ArticlePost.objects.all()
 
@@ -14,6 +16,13 @@ def article_list(request):
 
 def article_detail(request,id):
     article = ArticlePost.objects.get(id=id)
+
+    article.body = markdown.markdown(article.body,
+        extensions =[
+        'markdown.extensions.extra',
+        'markdown.extensions.codehilite',
+        ]
+        )
 
     context = {'article':article}
 
